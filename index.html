@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+    <title>TicTacToe</title>
+</head>
+
+<body>
+    <canvas id="stars"></canvas>
+    <div class="sound-control">
+        <div class="background-music">background-music <i class="bgm fas fa-volume-up"></i></div>
+        <div class="sound-effect">sound-effects <i class="se fas fa-volume-up"></i></div>
+    </div>
+    <main>
+        <div class="heading">
+            <span>Tic tac toe</span>
+        </div>
+        <div class="board" id="board">
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+        </div>
+        <div class="winning-message" id="winningMessage">
+            <div data-winning-message-text></div>
+            <button id="restartButton">Restart</button>
+        </div>
+        <div class="counter">
+            <span>X Wins: <span class="x-wins-counter">0</span></span>
+            <span>O Wins: <span class="o-wins-counter">0</span></span>
+            <span>Draw: <span class="draw-counter">0</span></span>
+        </div>
+        <div class="player-turn">
+            <span>Player Turn: <span class="turn-x-y"></span></span>
+        </div>
+    </main>
+    <div class="modal">
+        <h4>Tic Tac Toe</h4>
+        <div class="icons">
+            <i class="fas fa-times"></i>
+            <i class="far fa-circle"></i>
+            <i class="fas fa-times"></i>
+            <i class="far fa-circle"></i>
+        </div>
+        <div class="start-game">
+            <Button>Start Game</Button>
+        </div>
+    </div>
+    <div class="turnplayer">
+        <h4>Who goes first?</h4>
+        <div class="selection">
+            <div class="x-option"><i class="fas fa-times"></i></div>
+            <div class="o-option"><i class="far fa-circle"></i></div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,310 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --cell-size: 100px;
+    --mark-size: calc(var(--cell-size) * .9)
+}
+
+body {
+    font-family: 'Comic Neue', cursive;
+    margin: 0;
+}
+
+.board {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: repeat(3, auto);
+    position: absolute;
+    background-color: white;
+    transform: translate(calc(50vw - 150px), 20vh);
+}
+
+.cell.x::before,
+.cell.x::after,
+.cell.circle::before {
+    background-color: black;
+}
+
+.board.x .cell:not(.x):not(.circle):hover::before,
+.board.x .cell:not(.x):not(.circle):hover::after,
+.board.circle .cell:not(.x):not(.circle):hover::before {
+    background-color: lightgray;
+}
+
+.cell {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.cell.x,
+.cell.circle {
+    cursor: not-allowed;
+}
+
+.cell.x::before,
+.cell.x::after,
+.board.x .cell:not(.x):not(.circle):hover::before,
+.board.x .cell:not(.x):not(.circle):hover::after {
+    content: '';
+    position: absolute;
+    width: calc(var(--mark-size) * .15);
+    height: var(--mark-size);
+}
+
+.cell.x::before,
+.board.x .cell:hover::before {
+    transform: rotate(45deg);
+}
+
+.cell.x::after,
+.board.x .cell:hover::after {
+    transform: rotate(-45deg);
+}
+
+.cell.circle::before,
+.cell.circle::after,
+.board.circle .cell:not(.x):not(.circle):hover::before,
+.board.circle .cell:not(.x):not(.circle):hover::after {
+    content: '';
+    border-radius: 50%;
+    position: absolute;
+}
+
+.cell.circle::before,
+.board.circle .cell:not(.x):not(.circle):hover::before {
+    width: var(--mark-size);
+    height: var(--mark-size);
+}
+
+.cell.circle::after,
+.board.circle .cell:not(.x):not(.circle):hover::after {
+    width: calc(var(--mark-size) * .7);
+    height: calc(var(--mark-size) * .7);
+    background-color: white;
+}
+
+
+.winning-message {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, .9);
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.winning-message button {
+    font-size: 1.5rem;
+    background-color: white;
+    border: 1px solid black;
+    padding: .25em .5em;
+    cursor: pointer;
+}
+
+.winning-message button:hover {
+    background-color: black;
+    color: white;
+    border-color: white;
+}
+
+.winning-message.show {
+    display: flex;
+    flex-direction: column;
+}
+
+.counter {
+    display: flex;
+    flex-direction: column;
+    transform: translate(calc(50vw - 150px), 80vh);
+    color: white;
+    font-size: 25px;
+    position: absolute;
+}
+
+/* Edit Here */
+#stars {
+    display: block;
+    position: absolute;
+
+}
+
+main {
+    display: none;
+    overflow: hidden;
+}
+
+
+.heading {
+    font-size: 30px;
+    position: absolute;
+    color: white;
+    transform: translate(calc(50vw - 60px), 10vh);
+}
+
+.player-turn {
+    font-size: 30px;
+    position: absolute;
+    color: white;
+    transform: translate(calc(50vw - 100px), 70vh);
+}
+
+.modal {
+    display: block;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    color: white;
+    position: absolute;
+}
+
+.modal h4 {
+    transform: translate(calc(50vw - 110px), 20vh);
+    font-size: 50px;
+}
+
+.modal .icons {
+    display: flex;
+    transform: translate(calc(50vw - 100px), 15vh);
+    align-items: center;
+
+}
+
+.modal .fa-circle {
+    font-size: 40px;
+    padding: 0 25px;
+    vertical-align: middle;
+    animation: o-move;
+    animation-duration: 10s;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;  
+}
+
+@keyframes o-move {
+    0% {transform: translateY(0)}
+    12.5% {transform: translateY(5px)}
+    25% {transform: translateY(10px)}
+    37.5% {transform: translateY(5px)}
+    50% {transform: translateY(0px)}
+    62.5% {transform: translateY(-5px)}
+    75% {transform: translateY(-10px)}
+    87.5% {transform: translateY(-5px)}
+    100% {transform: translateY(0)}
+}
+
+.modal .fa-times {
+    font-size: 50px;
+    font-weight: 100;
+    animation: x-move;
+    animation-duration: 10s;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;    
+}
+
+@keyframes x-move {
+    0% {transform: translateY(0)}
+    12.5% {transform: translateY(-5px)}
+    25% {transform: translateY(-10px)}
+    37.5% {transform: translateY(-5px)}
+    50% {transform: translateY(0px)}
+    62.5% {transform: translateY(5px)}
+    75% {transform: translateY(10px)}
+    87.5% {transform: translateY(5px)}
+    100% {transform: translateY(0)}
+}
+
+.start-game {
+    transform: translate(calc(50vw - 70px), 20vh);
+    position: absolute;
+}
+
+.start-game button {
+    font-size: 1.5rem;
+    background-color: white;
+    border: 1px solid black;
+    padding: .25em .5em;
+    cursor: pointer;
+}
+
+.start-game button:hover,
+.selection .fa-times:hover,
+.selection .fa-circle:hover {
+    background-color: black;
+    color: white;
+    border-color: white;
+}
+
+.turnplayer {
+    overflow: hidden;
+    display: none;
+}
+
+.turnplayer h4 {
+    position: absolute;
+    transform: translate(calc(50vw - 125px), 20vh);
+    color: white;
+    font-size: 40px;
+}
+
+.selection {
+    position: absolute;
+    display: flex;
+    transform: translate(calc(50vw - 110px), 50vh);
+    align-items: center;
+    justify-content: space-around;
+}
+
+.x-option {
+    padding-right: 10px;
+    cursor: pointer;
+}
+
+.o-option {
+    padding-left: 10px;
+    cursor: pointer;
+}
+
+.selection .fa-times {
+    font-size: 100px;
+    color: black;
+    background-color: white;
+    font-weight: 100;
+    padding: 0 20px;
+}
+
+.selection .fa-circle {
+    font-size: 75px;
+    color: black;
+    background-color: white;
+    padding: 12px 15px;
+}
+
+.sound-control {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: white;
+    padding-right: 10px;
+    padding-top: 10px;
+    font-size: 15px;
+    z-index: 1;
+}
