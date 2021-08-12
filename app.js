@@ -18,16 +18,112 @@ const winningMessageTextElement = document.querySelector('[data-winning-message-
 const restartButton = document.getElementById('restartButton')
 const playerTurn = document.querySelector('.turn-x-y')
 const playerTurnContainer = document.querySelector('.player-turn')
+const viewHistory = document.querySelector('.view-history')
+const arrows = document.querySelector('.arrows')
+const playAgain = document.querySelector('.start-again')
+const elementsArray = [...cellElements]
 let circleTurn
 
-restartButton.addEventListener('click', () => {
-    clickSound.play()
-    clickSound.currentTime = 0;
+let move = ['', '', '', '', '', '', '', '', '']
+let index = []
+let savedIndex = []
+let savedMoves = []
+let savedMovesCopy = []
+
+
+playAgain.addEventListener('click', clickPlayAgain)
+
+function clickPlayAgain() {
+    arrows.style.display = "none"
     main.style.display = "none"
     selectTurnPlayer()
+    resetValues()
+    cellElements.forEach(element=>{
+        element.classList.remove('nohover')
+    })
+    clickSoundFx()
+}
+
+function resetValues() {
+    move = ['', '', '', '', '', '', '', '', '']
+    index = []
+    savedIndex = []
+    savedMoves = []
+    savedMovesCopy = []
+}
+
+
+viewHistory.addEventListener('click', clickViewHistory)
+
+function clickViewHistory() {    
+    cellElements.forEach(cell => {
+        cell.removeEventListener('click', handleClick)
+    })
+    elementsArray.forEach(element => {
+        if (element.classList.contains('x') || element.classList.contains('circle')) {
+        } else {
+            element.classList.add('nohover')
+        }
+    })
+    winningMessageElement.classList.remove('show')
+    arrows.style.display = "block" 
+    clickSoundFx()   
+}
+
+const previousBtn = document.querySelector('.left')
+previousBtn.addEventListener('click', handlePreviousButton)
+
+function handlePreviousButton() {
+    let elementToPop = index[index.length - 1]
+
+    for (let i = savedMoves.length - 1; i > -1; i--) {
+        for (let j = 9; j >= 0; j--) {
+            if (savedMoves[i][j] == "x", "circle") {
+                elementsArray[elementToPop].classList.remove('x', 'circle')
+            }
+        }
+    }
+    index.pop()
+    savedMoves.pop()
+    placeSoundFx()
+}
+
+const nextBtn = document.querySelector('.right')
+nextBtn.addEventListener('click', handleNextButton)
+
+function handleNextButton() {
+    if (savedMovesCopy.length == savedMoves.length) {
+        return false
+    }
+    index.push(savedIndex[index.length])
+    let elementToAdd = index[index.length - 1]
+    savedMoves.push(savedMovesCopy[savedMoves.length])
+
+    if (savedMoves[savedMoves.length - 1].includes("x")) {
+        elementsArray[elementToAdd].classList.add('x')
+    } else if (savedMoves[savedMoves.length - 1].includes("circle")) {
+        elementsArray[elementToAdd].classList.add('circle')
+    }
+    placeSoundFx()
+}
+
+function trackMove(e) {
+    const idx = elementsArray.indexOf(e.target)
+    const elementClass = e.target.classList[1]
+    move[idx] = elementClass
+    index.push(idx)
+    savedIndex.push(idx)
+    savedMoves.push(move)
+    savedMovesCopy.push(move)
+    move = ['', '', '', '', '', '', '', '', '', ]
+}
+
+restartButton.addEventListener('click', () => {
+    clickSoundFx()
+    main.style.display = "none"
+    selectTurnPlayer()
+    resetValues()
 })
-
-
 
 function startGame(firstTurn) {
     circleTurn = firstTurn
@@ -54,11 +150,12 @@ const circleWinCounter = document.querySelector('.o-wins-counter')
 const drawCounter = document.querySelector('.draw-counter')
 
 function handleClick(e) {
-    placeSound.play()
-    placeSound.currentTime = 0;
+    placeSoundFx()
     const cell = e.target
+
     const currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS
     placeMark(cell, currentClass)
+    trackMove(e)    
 
     if (checkWin(currentClass)) {
         endGame(false)
@@ -75,8 +172,7 @@ let oCount = 0;
 
 function endGame(draw) {
     if (draw) {
-        drawSound.play()
-        drawSound.currentTime = 0;
+        drawSoundFx()
         winningMessageTextElement.innerText = "Draw! "
         drawCount++
         if (drawCounter.innerHTML == "0") {
@@ -85,8 +181,7 @@ function endGame(draw) {
             drawCounter.innerHTML = ` ${drawCount}`
         }
     } else {
-        win.play()
-        win.currentTime = 0;
+        winSoundFx()
         winningMessageTextElement.innerText = `${circleTurn ? "O's" : "X's"} Wins! `
         if (circleTurn) {
             oCount++
@@ -152,14 +247,10 @@ const turnPlayerSelect = document.querySelector('.turnplayer')
 const main = document.querySelector('main')
 
 StartBtn.addEventListener('click', () => {
-    clickSound.play()
-    clickSound.currentTime = 0;
-    gameBg.play()
+    bgSoundFx()
+    clickSoundFx()
     selectTurnPlayer()
 })
-
-
-
 
 function selectTurnPlayer() {
     if (modal.style.display = "block") {
@@ -173,15 +264,13 @@ function firstTurnPlayer() {
     const xFirst = document.querySelector('.x-option')
     const oFirst = document.querySelector('.o-option')
     xFirst.addEventListener('click', () => {
-        clickSound.play()
-        clickSound.currentTime = 0;
+        clickSoundFx()
         turnPlayerSelect.style.display = "none"
         main.style.display = "block"
         startGame(false)
     })
     oFirst.addEventListener('click', () => {
-        clickSound.play()
-        clickSound.currentTime = 0;
+        clickSoundFx()
         turnPlayerSelect.style.display = "none"
         main.style.display = "block"
         startGame(true)
@@ -267,14 +356,38 @@ function updateStars() {
 }
 
 //sound
-let clickSound = new Audio("sounds/click.wav")
-let gameBg = new Audio("sounds/gamebg.mp3")
-gameBg.volume = 0.2;
-gameBg.loop = true;
-let placeSound = new Audio("sounds/place.wav")
-let win = new Audio("sounds/win.wav")
-let drawSound = new Audio("sounds/draw.wav")
+const clickSound = new Audio("sounds/click.wav")
+const gameBg = new Audio("sounds/gamebg.mp3")
+const placeSound = new Audio("sounds/place.wav")
+const win = new Audio("sounds/win.wav")
+const drawSound = new Audio("sounds/draw.wav")
 drawSound.volume = 0.5;
+
+function bgSoundFx() {
+    gameBg.volume = 0.2;
+    gameBg.loop = true;
+    gameBg.play()
+}
+
+function clickSoundFx() {
+    clickSound.play()
+    clickSound.currentTime = 0;
+}
+
+function placeSoundFx() {
+    placeSound.play()
+    placeSound.currentTime = 0;
+}
+
+function drawSoundFx() {
+    drawSound.play()
+    drawSound.currentTime = 0;
+}
+
+function winSoundFx() {
+    win.play()
+    win.currentTime = 0;
+}
 
 const bgmIcon = document.querySelector('.bgm')
 const bgmControl = document.querySelector('.background-music')
@@ -283,7 +396,7 @@ bgmControl.addEventListener('click', controlBGM)
 function controlBGM() {
     bgmIcon.classList.toggle('fa-volume-up')
     bgmIcon.classList.toggle('fa-volume-mute')
-    if(gameBg.volume){
+    if (gameBg.volume) {
         gameBg.volume = 0;
     } else {
         gameBg.volume = 0.2
@@ -294,10 +407,10 @@ const seIcon = document.querySelector('.se')
 const seControl = document.querySelector('.sound-effect')
 seControl.addEventListener('click', controlSoundEffect)
 
-function controlSoundEffect(){
+function controlSoundEffect() {
     seIcon.classList.toggle('fa-volume-up')
     seIcon.classList.toggle('fa-volume-mute')
-    if(clickSound.volume, placeSound.volume, win.volume, drawSound.volume){
+    if (clickSound.volume, placeSound.volume, win.volume, drawSound.volume) {
         clickSound.volume = 0
         placeSound.volume = 0
         win.volume = 0

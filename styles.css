@@ -54,6 +54,8 @@ body {
     cursor: not-allowed;
 }
 
+
+
 .cell.x::before,
 .cell.x::after,
 .board.x .cell:not(.x):not(.circle):hover::before,
@@ -111,15 +113,18 @@ body {
     font-size: 1.5rem;
 }
 
-.winning-message button {
+.winning-message button,
+.view-history {
     font-size: 1.5rem;
     background-color: white;
     border: 1px solid black;
     padding: .25em .5em;
     cursor: pointer;
+    margin: 10px;
 }
 
-.winning-message button:hover {
+.winning-message button:hover,
+.view-history:hover {
     background-color: black;
     color: white;
     border-color: white;
@@ -157,6 +162,40 @@ main {
     position: absolute;
     color: white;
     transform: translate(calc(50vw - 60px), 10vh);
+}
+
+.arrows{
+    font-size: 50px;
+    position: absolute;
+    color: white;
+    transform: translate(calc(50vw - 60px), 57.5vh);
+    display: none;
+}
+
+.arrows .left:hover,
+.arrows .right:hover,
+.arrows .left:focus,
+.arrows .right:focus {
+color: gold
+}
+
+
+.arrows .right {
+    transform: translateX(12.5vh)
+}
+
+.arrows .left {
+    transform: translateX(-12.5vh)
+}
+
+.start-again {
+    transform: translate(-3vw, 6vh);    
+}
+
+@media (min-width: 768px) {
+    .start-again {
+        transform: translate(-1vw, 6.5vh);    
+    }
 }
 
 .player-turn {
@@ -237,7 +276,8 @@ main {
     position: absolute;
 }
 
-.start-game button {
+.start-game button,
+.arrows .start-again {
     font-size: 1.5rem;
     background-color: white;
     border: 1px solid black;
@@ -247,7 +287,8 @@ main {
 
 .start-game button:hover,
 .selection .fa-times:hover,
-.selection .fa-circle:hover {
+.selection .fa-circle:hover,
+.arrows .start-again:hover {
     background-color: black;
     color: white;
     border-color: white;
@@ -307,4 +348,8 @@ main {
     padding-top: 10px;
     font-size: 15px;
     z-index: 1;
+}
+
+.nohover {
+    background-color: lightgray;
 }
