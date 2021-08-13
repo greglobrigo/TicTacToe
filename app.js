@@ -266,8 +266,9 @@ const turnPlayerSelect = document.querySelector('.turnplayer')
 const main = document.querySelector('main')
 
 StartBtn.addEventListener('click', () => {
-    if(bgmIcon.classList.contains('fa-volume-up')){
-        bgSoundFx()
+    bgSoundFx()
+    if(bgmIcon.classList.contains('fa-volume-mute')){
+        gameBg.volume = 0
     }
     clickSoundFx()
     selectTurnPlayer()
