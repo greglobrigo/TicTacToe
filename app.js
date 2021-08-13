@@ -38,7 +38,7 @@ function clickPlayAgain() {
     main.style.display = "none"
     selectTurnPlayer()
     resetValues()
-    cellElements.forEach(element=>{
+    cellElements.forEach(element => {
         element.classList.remove('nohover')
     })
     clickSoundFx()
@@ -55,25 +55,34 @@ function resetValues() {
 
 viewHistory.addEventListener('click', clickViewHistory)
 
-function clickViewHistory() {    
+function clickViewHistory() {
+    previousBtn.style.visibility = "visible"
+    nextBtn.style.visibility = "hidden"
+
+
     cellElements.forEach(cell => {
         cell.removeEventListener('click', handleClick)
     })
     elementsArray.forEach(element => {
-        if (element.classList.contains('x') || element.classList.contains('circle')) {
-        } else {
+        if (element.classList.contains('x') || element.classList.contains('circle')) {} else {
             element.classList.add('nohover')
         }
     })
+    board.classList.remove('x', 'circle')
     winningMessageElement.classList.remove('show')
-    arrows.style.display = "block" 
-    clickSoundFx()   
+    arrows.style.display = "block"
+    clickSoundFx()
 }
 
 const previousBtn = document.querySelector('.left')
 previousBtn.addEventListener('click', handlePreviousButton)
 
 function handlePreviousButton() {
+    if (savedMoves.length == 1) {
+        previousBtn.style.visibility = "hidden"
+    } else if (savedMoves.length == 0) {
+        return false;
+    }
     let elementToPop = index[index.length - 1]
 
     for (let i = savedMoves.length - 1; i > -1; i--) {
@@ -86,6 +95,9 @@ function handlePreviousButton() {
     index.pop()
     savedMoves.pop()
     placeSoundFx()
+    if (savedMoves.length < savedMovesCopy.length) {
+        nextBtn.style.visibility = "visible"
+    }
 }
 
 const nextBtn = document.querySelector('.right')
@@ -98,6 +110,13 @@ function handleNextButton() {
     index.push(savedIndex[index.length])
     let elementToAdd = index[index.length - 1]
     savedMoves.push(savedMovesCopy[savedMoves.length])
+
+    if (savedMoves.length >= 1) {
+        previousBtn.style.visibility = "visible"
+    }
+    if (savedMovesCopy.length == savedMoves.length) {
+        nextBtn.style.visibility = "hidden"
+    }
 
     if (savedMoves[savedMoves.length - 1].includes("x")) {
         elementsArray[elementToAdd].classList.add('x')
@@ -155,7 +174,7 @@ function handleClick(e) {
 
     const currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS
     placeMark(cell, currentClass)
-    trackMove(e)    
+    trackMove(e)
 
     if (checkWin(currentClass)) {
         endGame(false)
@@ -247,7 +266,9 @@ const turnPlayerSelect = document.querySelector('.turnplayer')
 const main = document.querySelector('main')
 
 StartBtn.addEventListener('click', () => {
-    bgSoundFx()
+    if(bgmIcon.classList.contains('fa-volume-up')){
+        bgSoundFx()
+    }
     clickSoundFx()
     selectTurnPlayer()
 })
